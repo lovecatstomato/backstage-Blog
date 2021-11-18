@@ -1,0 +1,15 @@
+.body{
+    height: 100vh;
+    background-image: url(../img/reg_bg_min.jpg);
+}
+.Rame{
+    margin: 100px 450px ;
+    padding: 30px;
+    float: right;
+    width: 350px;
+    border-radius: 10px;
+    background-color: #ffffff;
+}
+.login-form-button{
+    width: 100%;
+}

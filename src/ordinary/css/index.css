@@ -1,0 +1,24 @@
+/* 主体框架 */
+.boy{
+    padding: 0px;
+    margin: 0px;
+}
+/* 搜索框 */
+.search{
+    margin: auto;
+    width: 600px;
+    padding: 20px;
+}
+.me{
+    background-color: #353535;
+    color: #ffffff;
+    padding-left: 120px;
+}
+/* 底部介绍栏主体 */
+.introduce{
+    height: 100vh;
+    background-color: #001E50;
+}
+.but{
+    
+}
