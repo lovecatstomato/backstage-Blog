@@ -20,7 +20,7 @@ class login extends React.Component {
   }
   // 获取文本框的值
   getTxt = (values) => {
-    service.post(`/sys/login?username=${values.username}&password=${values.password}`).then((red) => {
+    service.post('/sys/login',`username=${values.username}&password=${values.password}`).then((red) => {
       // console.log(red);
       if (red.data.code === 2) {
         console.log(red);

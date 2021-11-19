@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 // import E from 'wangeditor'
 import ReactWEditor from 'wangeditor-for-react';
 import {
@@ -7,116 +7,105 @@ import {
     Button,
     Select,
     Upload,
+    message
 } from 'antd';
 import { UploadOutlined } from '@ant-design/icons';
 import axios from 'axios';
-
+const { Option } = Select;
 
 const FormSizeDemo = () => {
-    const [componentSize, setComponentSize] = useState('default');
+    const [list, setList] = useState([]);
+    const [form] = Form.useForm();
 
-    const onFormLayoutChange = ({ size }) => {
-        setComponentSize(size);
-    };
-    const normFile = (e) => {
-        console.log('Upload event:', e);
+    useEffect(() => {
+        axios.get('http://127.0.0.1:8086/news/column/all', {
+            headers: {
+                'X-Token': localStorage.getItem('token')
+            }
+        }).then(resp => {
+            setList(resp.data.data);
+        });
+    }, []);
 
-        if (Array.isArray(e)) {
-            return e;
+
+    const onFinish = (values) => {
+        console.log(values);
+        const fd = new FormData();
+        fd.append('title', values.title);
+        fd.append('content', values.content);
+        fd.append('columnId', values.columnId);
+        if (values.upload.fileList.length) {
+            fd.append('file', values.upload.file);
+        }
+        if (values.remark) {
+            fd.append('remark', values.remark);
         }
 
-        return e && e.fileList;
-    };
-    const onFinish = (values) => {
-        console.log('Received values of form: ', values);
-        let fd = new FormData();
-        fd.set('title', values.title);
-        fd.set('content', values.content);
-        fd.set('columnId', values.columnId);
-        // for(let item of fd){
-        //     console.log(item, 22);
-        // }
-        fd.set('file', values.upload[0]);
-        fd.set('remark', values.remark);
-        axios.post('http://localhost:8086/news/add',fd,{
-            headers: {'X-Token': localStorage.getItem('token')}
+        axios.post('http://127.0.0.1:8086/news/add', fd, {
+            headers: {
+                'X-Token': localStorage.getItem('token')
+            }
         }).then(resp => {
-            console.log(1);
-            // console.log(localStorage.getItem('token'));
-            console.log(resp,333);
-        });
+            console.log(resp.data);
+            if (resp.data.code === 2) {
+                message.success('添加成功');
+                form.resetFields(); // 重置表单
+            }
+        })
     };
 
-    const onBeforeUpload = (file)=>{
-        console.log(file, 111);
+    const onBeforeUpload = (file) => {
         return false;
     };
-
 
     return (
 
         <Form
-            labelCol={{
-                span: 4,
-            }}
-            wrapperCol={{
-                span: 14,
-            }}
+            labelCol={{ span: 2 }}
+            wrapperCol={{ span: 14, }}
             layout="horizontal"
-            initialValues={{
-                size: componentSize,
-            }}
+            form={form}
             onFinish={onFinish}
-
-            onValuesChange={onFormLayoutChange}
-            size={componentSize}
         >
-            <Form.Item label="新闻标题" name="title">
+            <Form.Item label="新闻标题" name="title"
+                rules={[{ required: true, message: '新闻标题不能为空' }]}
+            >
                 <Input />
             </Form.Item>
-            <Form.Item label="新闻作者" name="user">
+            <Form.Item label="描述" name="remark">
                 <Input />
             </Form.Item>
-            <Form.Item label="新闻分类" name="columnId">
+            <Form.Item label="栏目编号" name="columnId"
+                rules={[{ required: true, message: '请选择新闻栏目' }]}
+            >
                 <Select>
-                    <Select.Option value="1">Demo</Select.Option>
+                    {
+                        list.map(item => <Option key={item.columnId} value={item.columnId}>{item.columnName}</Option>)
+                    }
                 </Select>
             </Form.Item>
             <Form.Item
                 name="upload"
                 label="图片上传"
-                valuePropName="fileList"
-                getValueFromEvent={normFile}
             >
                 <Upload name="logo" listType="picture" beforeUpload={onBeforeUpload}>
                     <Button icon={<UploadOutlined />}>Click to upload</Button>
                 </Upload>
             </Form.Item>
-            <Form.Item label=" " name="remark">
+            <Form.Item name="content" label="新闻内容"
+                rules={[{ required: true, message: '请输入新闻内容', trigger: 'blur' }]}
+            >
                 <ReactWEditor
-                    defaultValue={'<h1>标题</h1>'}
-                    linkImgCallback={(src, alt, href) => {
-                        // 插入网络图片的回调事件
-                        console.log('图片 src ', src)
-                        console.log('图片文字说明', alt)
-                        console.log('跳转链接', href)
-                    }}
-                    onlineVideoCallback={(video) => {
-                        // 插入网络视频的回调事件
-                        console.log('插入视频内容', video)
-                    }}
-                    onChange={(html) => {
-                        console.log('onChange html:', html)
-                    }}
-                    onBlur={(html) => {
-                        console.log('onBlur html:', html)
-                    }}
-                    onFocus={(html) => {
-                        console.log('onFocus html:', html)
+                    config={{
+                        uploadImgServer: 'http://127.0.0.1:8086/news/upload',
+                        uploadFileName: 'file',
+                        uploadImgHeaders: {
+                            'X-Token': localStorage.getItem('token')
+                        }
                     }}
                 />
             </Form.Item>
-            <Form.Item label=" " >
+            <Form.Item>
                 <Button type="primary" htmlType="submit">添加</Button>
             </Form.Item>
         </Form>

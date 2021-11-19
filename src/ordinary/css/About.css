@@ -2,3 +2,24 @@
 .site-layout-background {
     background: #fff;
 }
+
+.header h1{
+    color: #fff;
+}
+
+.header{
+    display: flex;
+    justify-content: space-between;
+}
+
+.header div{
+    color: #fff;
+}
+
+.show span{
+    padding: 1px 4px;
+}
+
+.show button{
+    border-radius: 25px;
+}

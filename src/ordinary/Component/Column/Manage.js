@@ -20,7 +20,7 @@ const Add = (record) => {
         newsColumnUpdateApi({ columnName: values.columnName, columnId: values.columnId }).then(red => {
             if (red.code === 2) {
                 // record
-                console.log(1);
+                // console.log(record);
 
             }
         })
@@ -32,14 +32,18 @@ const Add = (record) => {
     const showModal = () => {
         setIsModalVisible(true);
     };
+    // 退出窗口
+    const handleCancel = () => {
+        setIsModalVisible(false);
+    };
 
     return (
         <>
-        {/* 页面内容 */}
+            {/* 页面内容 */}
             <Button type="primary" onClick={showModal}>
                 修改
             </Button>
-            <Modal visible={isModalVisible} footer={[]}>
+            <Modal visible={isModalVisible} onCancel={handleCancel} footer={[]}>
                 <Form
                     name="basic"
                     labelCol={{
@@ -89,7 +93,7 @@ class Manage extends React.Component {
     del = (valu) => {
         // newsColumnDeleteApi()
         console.log(valu);
-        newsColumnDeleteApi({ columnId:valu.columnId }).then(ret => {
+        newsColumnDeleteApi({ columnId: valu.columnId }).then(ret => {
             console.log(ret);
         })
     }
@@ -137,7 +141,7 @@ class Manage extends React.Component {
             if (re.data.code === 2) {
                 // console.log(re.data.data);
                 let List = re.data.data
-                // console.log(List);
+                console.log(List);
                 this.setState(
                     this.state.data = List
                 )

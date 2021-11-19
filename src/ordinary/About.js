@@ -1,6 +1,6 @@
 import React from 'react';
 import { AppstoreOutlined, MailOutlined } from '@ant-design/icons';
-import { Layout, Menu, Breadcrumb } from 'antd';
+import { Layout, Menu, Breadcrumb, Button } from 'antd';
 import './css/About.css'
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import "../routing/index"
@@ -9,12 +9,13 @@ import Manage from "../ordinary/Component/Column/Manage"
 import Contentadd from "../ordinary/Component/content/Contentadd"
 import Newsmana from "../ordinary/Component/content/Newsmana"
 import Inquire from './Component/content/Inquire';
+import { loginOutApi } from '../api'
 
 const { SubMenu } = Menu;
 const { Header, Content, Sider } = Layout;
 
 
-const About = () => {
+const About = (props) => {
   const rootSubmenuKeys = ['sub1', 'sub2', 'sub4'];
   const [openKeys, setOpenKeys] = React.useState(['sub1']);
 
@@ -26,16 +27,27 @@ const About = () => {
       setOpenKeys(latestOpenKey ? [latestOpenKey] : []);
     }
   };
+  // 退出按钮
+  const quit = () =>{
+    // console.log(1);
+    loginOutApi().then(res => {
+      console.log(res);
+      props.history.push('/')
+    })
+  }
   return (
     <Router>
       <Layout>
         <Header className="header">
-          <div className="logo" />
-          <Menu theme="dark" mode="horizontal" defaultSelectedKeys={['2']}>
-            <Menu.Item key="1">nav 1</Menu.Item>
-            <Menu.Item key="2">nav 2</Menu.Item>
-            <Menu.Item key="3">nav 3</Menu.Item>
-          </Menu>
+          <div className="logo">
+            <h1>新闻管理系统</h1>
+          </div>
+
+          <div className='show'>
+            <span>欢迎你</span>
+            <span>{localStorage.getItem('username')}</span>
+            <Button onClick={quit}>退出</Button>
+          </div>
         </Header>
         <Layout>
           <Sider className="site-layout-background">
