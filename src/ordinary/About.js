@@ -1,21 +1,20 @@
 import React from 'react';
 import { AppstoreOutlined, MailOutlined } from '@ant-design/icons';
-import { Layout, Menu, Breadcrumb, Button } from 'antd';
+import { Layout, Menu, Breadcrumb } from 'antd';
 import './css/About.css'
 import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import "../routing/index"
 import Home from "../ordinary/Component/Column/Home";
 import Manage from "../ordinary/Component/Column/Manage"
 import Contentadd from "../ordinary/Component/content/Contentadd"
-import Newsmana from "../ordinary/Component/content/Newsmana"
+import News from "../ordinary/Component/content/News"
 import Inquire from './Component/content/Inquire';
-import { loginOutApi } from '../api'
 
 const { SubMenu } = Menu;
 const { Header, Content, Sider } = Layout;
 
 
-const About = (props) => {
+const About = () => {
   const rootSubmenuKeys = ['sub1', 'sub2', 'sub4'];
   const [openKeys, setOpenKeys] = React.useState(['sub1']);
 
@@ -27,27 +26,12 @@ const About = (props) => {
       setOpenKeys(latestOpenKey ? [latestOpenKey] : []);
     }
   };
-  // 退出按钮
-  const quit = () =>{
-    // console.log(1);
-    loginOutApi().then(res => {
-      console.log(res);
-      props.history.push('/')
-    })
-  }
   return (
     <Router>
       <Layout>
         <Header className="header">
-          <div className="logo">
-            <h1>新闻管理系统</h1>
-          </div>
-
-          <div className='show'>
-            <span>欢迎你</span>
-            <span>{localStorage.getItem('username')}</span>
-            <Button onClick={quit}>退出</Button>
-          </div>
+          {/* <div className="logo" ></div> */}
+          <h1>新闻后台管理系统</h1>
         </Header>
         <Layout>
           <Sider className="site-layout-background">
@@ -66,7 +50,7 @@ const About = (props) => {
                 <Link to="/about/contentadd">
                   <Menu.Item key="5">新闻的添加</Menu.Item>
                 </Link>
-                <Link to="/about/newsmana">
+                <Link to="/about/newsmana/all">
                   <Menu.Item key="6">新闻管理</Menu.Item>
                 </Link>
                 <Link to="/about/inquire">
@@ -93,7 +77,7 @@ const About = (props) => {
                 <Route exact path="/about/home" component={Home} />{/* 添加栏目 */}
                 <Route path="/about/manage" component={Manage} />{/* 栏目管理 */}
                 <Route path="/about/contentadd" component={Contentadd} />{/* 新闻的添加 */}
-                <Route path="/about/newsmana" component={Newsmana} />{/* 新闻管理 */}
+                <Route path="/about/newsmana" component={News} />{/* 新闻管理 */}
                 <Route path="/about/inquire" component={Inquire} />{/* 新闻查询 */}
               </Switch>
 

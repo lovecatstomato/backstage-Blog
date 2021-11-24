@@ -40,6 +40,7 @@ const FormSizeDemo = () => {
         if (values.remark) {
             fd.append('remark', values.remark);
         }
+        console.log(fd);
 
         axios.post('http://127.0.0.1:8086/news/add', fd, {
             headers: {
@@ -57,6 +58,8 @@ const FormSizeDemo = () => {
     const onBeforeUpload = (file) => {
         return false;
     };
+
+
 
     return (
 
@@ -88,7 +91,9 @@ const FormSizeDemo = () => {
                 name="upload"
                 label="图片上传"
             >
-                <Upload name="logo" listType="picture" beforeUpload={onBeforeUpload}>
+                <Upload name="logo" listType="picture"
+                maxCount={1}
+                 beforeUpload={onBeforeUpload} >
                     <Button icon={<UploadOutlined />}>Click to upload</Button>
                 </Upload>
             </Form.Item>

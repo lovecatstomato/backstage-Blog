@@ -8,6 +8,7 @@ const BasicRoute = () => {
         <Switch>
             <Route exact path="/" component={App} />
             <Route path="/about" component={About} />
+
         </Switch>
     )
 }
